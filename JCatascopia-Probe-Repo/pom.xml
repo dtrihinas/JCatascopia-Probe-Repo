@@ -8,5 +8,11 @@
   	<module>ProbePack</module>
   	<module>HAProxyProbe</module>
   	<module>CassandraProbe</module>
+  	<module>TomcatProbe</module>
+  	<module>CouchBaseProbe</module>
+  	<module>PostgresProbe</module>
+  	<module>DataPlayProbe</module>
+  	<module>RabbitMQProbe</module>
+  	<module>WindowsProbe</module>
   </modules>
 </project>

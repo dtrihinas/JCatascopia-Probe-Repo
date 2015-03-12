@@ -1,0 +1,41 @@
+{
+  "probe": "TomcatProbe",
+  "desc": "A JCatascopia Probe collecting usage stats from Apache Tomcat. To work, the Tomcat API must be accessible by the specified tomcat user",
+  "metrics": [
+    {
+      "name": "maxThreads",
+      "desc": ""
+    },
+    {
+      "name": "currentThreadCount",
+      "desc": ""
+    },
+    {
+      "name": "currentThreadsBusy",
+      "desc": ""
+    },
+    {
+      "name": "bytesReceived",
+      "desc": ""
+    },
+    {
+      "name": "bytesSent",
+      "desc": ""
+    },
+    {
+      "name": "errorCount",
+      "desc": ""
+    },
+    {
+      "name": "processingTime",
+      "desc": ""
+    },
+    {
+      "name": "requestThroughput",
+      "desc": ""
+    }
+  ],
+  "os": [
+    "Linux"
+  ]
+}
