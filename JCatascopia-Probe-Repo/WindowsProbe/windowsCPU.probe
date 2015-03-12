@@ -1,0 +1,25 @@
+{
+  "probe": "WindowsCPUProbe",
+  "desc": "Windows CPUProbe collects CPU usage stats",
+  "metrics": [
+    {
+      "name": "cpuTotal",
+      "desc": "Total system CPU usage"
+    },
+    {
+      "name": "cpuUser",
+      "desc": "system USER usage"
+    },
+    {
+      "name": "cpuSystem",
+      "desc": "system SYSTEM usage"
+    },
+    {
+      "name": "cpuIdle",
+      "desc": "system IDLE Usage"
+    }
+  ],
+  "os": [
+    "Windows"
+  ]
+}

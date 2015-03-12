@@ -1,0 +1,25 @@
+{
+  "probe": "WindowsNetworkProbe",
+  "desc": "WindowsNetworkProbe collects Network usage stats",
+  "metrics": [
+    {
+      "name": "netBytesIN",
+      "desc": "Bytes IN per Second"
+    },
+    {
+      "name": "netPacketsIN",
+      "desc": "Packets IN per Second"
+    },
+    {
+      "name": "netBytesOUT",
+      "desc": "Bytes OUT per Second"
+    },
+    {
+      "name": "netPacketsOUT",
+      "desc": "Packets OUT per Second"
+    }
+  ],
+  "os": [
+    "Windows"
+  ]
+}

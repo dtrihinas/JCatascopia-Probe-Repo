@@ -1,0 +1,17 @@
+{
+  "probe": "WindowsDiskProbe",
+  "desc": "WindowsDiskProbe collects Disk usage stats",
+  "metrics": [
+    {
+      "name": "diskFree",
+      "desc": "available disk space in MB"
+    },
+    {
+      "name": "diskFreePercent",
+      "desc": "disk space free (%)"
+    }
+  ],
+  "os": [
+    "Windows"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "probe": "WindowsMemoryProbe",
+  "desc": "Memory Probe collects memory stats",
+  "metrics": [
+    {
+      "name": "memUsed",
+      "desc": "Memory Used"
+    },
+    {
+      "name": "memFree",
+      "desc": "Memory Free"
+    },
+    {
+      "name": "swapUsedPercent",
+      "desc": "Swapfile used percentage"
+    }
+  ],
+  "os": [
+    "Windows"
+  ]
+}
