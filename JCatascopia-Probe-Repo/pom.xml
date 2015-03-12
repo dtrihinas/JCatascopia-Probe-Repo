@@ -14,5 +14,6 @@
   	<module>DataPlayProbe</module>
   	<module>RabbitMQProbe</module>
   	<module>WindowsProbe</module>
+  	<module>ExampleProbe</module>
   </modules>
 </project>

@@ -1,0 +1,17 @@
+{
+  "probe": "ExampleProbe",
+  "desc": "An example or better a template of a JCatascopia Probe",
+  "metrics": [
+    {
+      "name": "curTimestamp",
+      "desc": ""
+    },
+    {
+      "name": "myRandomMetric",
+      "desc": ""
+    }
+  ],
+  "os": [
+    "all"
+  ]
+}
