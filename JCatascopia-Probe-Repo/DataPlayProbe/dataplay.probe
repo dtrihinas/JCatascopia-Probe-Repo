@@ -1,0 +1,21 @@
+{
+  "probe": "DataPlayProbe",
+  "desc": "A JCatascopia Probe collecting DataPlay master node stats",
+  "metrics": [
+    {
+      "name": "mean",
+      "desc": ""
+    },
+    {
+      "name": "standev",
+      "desc": ""
+    },
+    {
+      "name": "variation",
+      "desc": ""
+    }
+  ],
+  "os": [
+    "all"
+  ]
+}
