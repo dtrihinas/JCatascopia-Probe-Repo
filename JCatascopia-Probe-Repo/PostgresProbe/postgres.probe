@@ -1,0 +1,25 @@
+{
+  "probe": "PostgresProbe",
+  "desc": "A JCatascopia Probe collecting performance metrics from Postgres database",
+  "metrics": [
+    {
+      "name": "pgActiveConnections",
+      "desc": "total number of active connections to database"
+    },
+    {
+      "name": "pgDBsizeKB",
+      "desc": "total disk usage of database in KB"
+    },
+    {
+      "name": "pgBlocksDiskRead",
+      "desc": "blocks read directly from disk or operating system since last checkpoint"
+    },
+    {
+      "name": "pgBlocksCacheHit",
+      "desc": "Blocks read from PostgreSQL Cache per second since last checkpoint"
+    }
+  ],
+  "os": [
+    "all"
+  ]
+}
