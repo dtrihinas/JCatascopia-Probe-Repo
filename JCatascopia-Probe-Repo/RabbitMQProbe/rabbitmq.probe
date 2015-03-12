@@ -1,0 +1,29 @@
+{
+  "probe": "RabbitMQProbe",
+  "desc": "A JCatascopia Probe collecting RabbitMQ usage stats",
+  "metrics": [
+    {
+      "name": "{queue}.memory",
+      "desc": "Total amount of RAM used by this queue in KB"
+    },
+    {
+      "name": "{queue}.consumers",
+      "desc": "Number of consumers this queue has"
+    },
+    {
+      "name": "{queue}.msgs",
+      "desc": "Total number of messages in this queue"
+    },
+    {
+      "name": "{queue}.dlvr_rate",
+      "desc": "Rate at which messages are delivered"
+    },
+    {
+      "name": "{queue}.pub_rate",
+      "desc": "Rate at which messages are published to the queue"
+    }
+  ],
+  "os": [
+    "all"
+  ]
+}
