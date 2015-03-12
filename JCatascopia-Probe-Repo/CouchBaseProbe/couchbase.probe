@@ -1,0 +1,29 @@
+{
+  "probe": "CouchBaseProbe",
+  "desc": "A JCatascopia Probe collecting usage stats from Couchbase document NoSQL store",
+  "metrics": [
+    {
+      "name": "curr_connections",
+      "desc": "Number of active connections"
+    },
+    {
+      "name": "curr_items",
+      "desc": "Number of items stored on node"
+    },
+    {
+      "name": "ops",
+      "desc": "Operations per second"
+    },
+    {
+      "name": "couch_views_ops",
+      "desc": "Operations per second on bucket views"
+    },
+    {
+      "name": "cache_miss_rate",
+      "desc": "percentage of reads to bucket from disk opposed to RAM"
+    }
+  ],
+  "os": [
+    "all"
+  ]
+}
