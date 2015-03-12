@@ -1,0 +1,21 @@
+{
+  "probe": "CassandraProbe",
+  "desc": "A JCatascopia Probe collecting read/write latency and load stats from Cassandra database",
+  "metrics": [
+    {
+      "name": "{keyspace}_readLatency",
+      "desc": "Specified keyspace read latency"
+    },
+    {
+      "name": "{keyspace}_writeLatency",
+      "desc": "Specified keyspace write latency"
+    },
+    {
+      "name": "{keyspace}_load",
+      "desc": "Specified keyspace total space used in KBytes"
+    }
+  ],
+  "os": [
+    "Linux"
+  ]
+}

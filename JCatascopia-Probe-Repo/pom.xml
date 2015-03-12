@@ -7,5 +7,6 @@
   <modules>
   	<module>ProbePack</module>
   	<module>HAProxyProbe</module>
+  	<module>CassandraProbe</module>
   </modules>
 </project>
