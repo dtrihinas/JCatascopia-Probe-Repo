@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright 2014, Laboratory of Internet Computing (LInC), Department of Computer Science, University of Cyprus
+ * Copyright 2014-2015, 
+ * Laboratory of Internet Computing (LInC), Department of Computer Science, University of Cyprus
  * 
  * For any information relevant to JCatascopia Monitoring System,
  * please contact Demetris Trihinas, trihinas{at}cs.ucy.ac.cy
@@ -16,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package eu.celarcloud.jcatascopia.probepack;
+package eu.celarcloud.jcatascopia.probes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +25,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import eu.celarcloud.jcatascopia.exceptions.CatascopiaException;
-import eu.celarcloud.jcatascopia.probepack.filters.Filter;
-
+import eu.celarcloud.jcatascopia.agent.exceptions.CatascopiaException;
+import eu.celarcloud.jcatascopia.probes.filters.Filter;
 
 public interface IProbe {
 	
@@ -52,7 +52,7 @@ public interface IProbe {
 	
 	public ArrayList<ProbeProperty> getProbePropertiesAsList();
 	
-	public ProbeProperty getProbePropertyByID(int propID)  throws CatascopiaException;
+	public ProbeProperty getProbePropertyByID(int propID) throws CatascopiaException;
 	
 	public void activate();
 	
@@ -88,12 +88,7 @@ public interface IProbe {
 	
 	public void removeQueue();
 	
-	public boolean metricsPullable();
-	
-	public void setPullableFlag(boolean flag);
-	
-	public void pull();
-	
+	//filtering api
 	public void turnFilteringOn(int propID, Filter f);
 	public void turnFilteringOn(int propID, Filter f, boolean globalFilterFlag);
 	public void turnFilteringOff();

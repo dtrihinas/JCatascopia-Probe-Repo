@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright 2014, Laboratory of Internet Computing (LInC), Department of Computer Science, University of Cyprus
+ * Copyright 2014-2015, 
+ * Laboratory of Internet Computing (LInC), Department of Computer Science, University of Cyprus
  * 
  * For any information relevant to JCatascopia Monitoring System,
  * please contact Demetris Trihinas, trihinas{at}cs.ucy.ac.cy
@@ -16,16 +17,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package eu.celarcloud.jcatascopia.probepack.probeLibrary;
+package eu.celarcloud.jcatascopia.probes.probeLibrary;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-import eu.celarcloud.jcatascopia.probepack.Probe;
-import eu.celarcloud.jcatascopia.probepack.ProbeMetric;
-import eu.celarcloud.jcatascopia.probepack.ProbePropertyType;
+import eu.celarcloud.jcatascopia.probes.Probe;
+import eu.celarcloud.jcatascopia.probes.ProbeMetric;
+import eu.celarcloud.jcatascopia.probes.ProbePropertyType;
 
 public class StaticInfoProbe extends Probe{
 		
@@ -35,12 +36,10 @@ public class StaticInfoProbe extends Probe{
 		this.addProbeProperty(1,"arch",ProbePropertyType.STRING,"","Machine architecture");
 		this.addProbeProperty(2,"cpuNum",ProbePropertyType.STRING,"","Number of CPUs");
 		this.addProbeProperty(3,"btime",ProbePropertyType.STRING,"","boot time");
-		
-		this.setPullableFlag(true);
 	}
 	
 	public StaticInfoProbe(){
-		this("StaticInfoProbe", 3600); //collect every hour
+		this("StaticInfoProbe", 300); //collect every 5min
 	}
 
 	@Override

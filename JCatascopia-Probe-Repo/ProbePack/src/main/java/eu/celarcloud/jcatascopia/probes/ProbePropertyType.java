@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright 2014, Laboratory of Internet Computing (LInC), Department of Computer Science, University of Cyprus
+ * Copyright 2014-2015, 
+ * Laboratory of Internet Computing (LInC), Department of Computer Science, University of Cyprus
  * 
  * For any information relevant to JCatascopia Monitoring System,
  * please contact Demetris Trihinas, trihinas{at}cs.ucy.ac.cy
@@ -16,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package eu.celarcloud.jcatascopia.probepack;
+package eu.celarcloud.jcatascopia.probes;
 
 public enum ProbePropertyType {
 	INTEGER, LONG, CHAR, STRING, FLOAT, DOUBLE, BOOLEAN;

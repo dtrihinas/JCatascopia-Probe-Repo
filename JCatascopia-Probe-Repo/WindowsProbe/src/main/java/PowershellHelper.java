@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 
-import eu.celarcloud.jcatascopia.probepack.ProbePropertyType;
+import eu.celarcloud.jcatascopia.probes.ProbePropertyType;
 
 public class PowershellHelper {
 

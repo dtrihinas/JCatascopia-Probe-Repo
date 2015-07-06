@@ -9,16 +9,16 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import eu.celarcloud.jcatascopia.probepack.Probe;
-import eu.celarcloud.jcatascopia.probepack.ProbeMetric;
-import eu.celarcloud.jcatascopia.probepack.ProbePropertyType;
+import eu.celarcloud.jcatascopia.probes.Probe;
+import eu.celarcloud.jcatascopia.probes.ProbeMetric;
+import eu.celarcloud.jcatascopia.probes.ProbePropertyType;
 
 /**
  * 
  * @author Demetris Trihinas
  *
  */
-public class TomcatProbe extends Probe{
+public class TomcatProbe extends Probe {
 	
 	private static final String CONFIG_PATH = "tomcat.properties";
 	private static final String GlobalRequestProcessor_URL = "http://localhost:8080/manager/jmxproxy?qry=Catalina:name=%22http-bio-8080%22,type=GlobalRequestProcessor";

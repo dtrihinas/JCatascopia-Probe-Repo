@@ -9,12 +9,11 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import eu.celarcloud.jcatascopia.probepack.Probe;
-import eu.celarcloud.jcatascopia.probepack.ProbeMetric;
-import eu.celarcloud.jcatascopia.probepack.ProbePropertyType;
+import eu.celarcloud.jcatascopia.probes.Probe;
+import eu.celarcloud.jcatascopia.probes.ProbeMetric;
+import eu.celarcloud.jcatascopia.probes.ProbePropertyType;
 
-
-public class CassandraProbe extends Probe{
+public class CassandraProbe extends Probe {
 	
 	private static int DEFAULT_SAMPLING_PERIOD = 30;
 	private static String DEFAULT_PROBE_NAME = "CassandraProbe";

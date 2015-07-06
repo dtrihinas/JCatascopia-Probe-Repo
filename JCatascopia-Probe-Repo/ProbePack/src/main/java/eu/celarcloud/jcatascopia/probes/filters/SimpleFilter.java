@@ -16,32 +16,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package eu.celarcloud.jcatascopia.probepack.filters;
+package eu.celarcloud.jcatascopia.probes.filters;
 
 /**
- * The RangeFilter is used to simply filter values in the window [previousValue-Range,previousValue+Range]
- * The RangeFilteronly requires from users to define upon instantiation, the range of their interest.
+ * The SimpleFilter is used to filter values below/over a given threshold
  * 
  * @author Demetris Trihinas
  *
  */
-public class RangeFilter extends Filter{
+public class SimpleFilter extends Filter{
+
+	public enum SimpleFilterType {OVER, BELOW};
 	
-	private double range;
+	private double threshold;
+	private SimpleFilterType type;
 	
-	public RangeFilter(double range){
-		this.range = range;
+	public SimpleFilter(double threshold, SimpleFilterType type){
+		this.threshold = threshold;
+		this.type = type;
 	}
 	
-	public void setRange(double r){
-		this.range = r;
+	public SimpleFilter(double threshold){
+		this(threshold,SimpleFilterType.BELOW);
 	}
 	
 	@Override
 	public void adjustFilter(double curValue) {
-		if (!this.checkFlag){
-			this.window_low = curValue - this.range;
-			this.window_high = curValue + this.range;
+		//ignore output of check() since we do not have a window here but a threshold
+		
+		if (this.type == SimpleFilterType.BELOW){
+			if (curValue < this.threshold) //filter values below threshold
+				this.checkFlag = true;
+			else
+				this.checkFlag = false;
+		}
+		else {
+			if (curValue > this.threshold) //filter values over threshold
+				this.checkFlag = true;
+			else
+				this.checkFlag = false;
 		}
 	}
 }

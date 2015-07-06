@@ -7,11 +7,11 @@
   </parent>
   <artifactId>PostgresProbe</artifactId>
    <dependencies>
-  	<dependency>
-  		<groupId>eu.celarcloud.cloud-ms</groupId>
-  		<artifactId>JCatascopia-Probe-Package</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
+   <dependency>
+  	<groupId>JCatascopia</groupId>
+  	<artifactId>ProbePack</artifactId>
+  	<version>0.0.1-SNAPSHOT</version>
+  </dependency>
   	<dependency>
 		<groupId>postgresql</groupId>
 		<artifactId>postgresql</artifactId>

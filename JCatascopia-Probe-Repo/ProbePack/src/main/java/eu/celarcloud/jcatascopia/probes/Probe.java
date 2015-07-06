@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright 2014, Laboratory of Internet Computing (LInC), Department of Computer Science, University of Cyprus
+ * Copyright 2014-2015, 
+ * Laboratory of Internet Computing (LInC), Department of Computer Science, University of Cyprus
  * 
  * For any information relevant to JCatascopia Monitoring System,
  * please contact Demetris Trihinas, trihinas{at}cs.ucy.ac.cy
@@ -16,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package eu.celarcloud.jcatascopia.probepack;
+package eu.celarcloud.jcatascopia.probes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,8 +28,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import eu.celarcloud.jcatascopia.exceptions.CatascopiaException;
-import eu.celarcloud.jcatascopia.probepack.filters.Filter;
+import eu.celarcloud.jcatascopia.agent.exceptions.CatascopiaException;
+import eu.celarcloud.jcatascopia.probes.filters.Filter;
 
 /** 
  * @author Demetris Trihinas
@@ -43,8 +44,11 @@ import eu.celarcloud.jcatascopia.probepack.filters.Filter;
  *     checkReceivedMetric - Method that performs metric check(s) and/or validation
  *
  */
-public abstract class Probe extends Thread implements IProbe{
-    /**
+public abstract class Probe extends Thread implements IProbe {
+
+	private static final int MaxErrorCount = 10;
+
+	/**
      * give the probe an ID	
      */
 	private String probeID;
@@ -53,13 +57,9 @@ public abstract class Probe extends Thread implements IProbe{
 	 */
 	private String probeName;
 	/**
-	 * default collecting frequency 
+	 * default collecting frequency in ms 
 	 */
 	private int collectPeriod;
-	/**
-	 * frequency in ms
-	 */
-	private long collectPeriodMillis;
 	/**
 	 * probe status - ACTIVE, INACTIVE, DYING
 	 */
@@ -92,8 +92,6 @@ public abstract class Probe extends Thread implements IProbe{
 	
 	private byte errorCountFlag;
 	
-	private boolean metricsPullFlag;
-	
 	private HashMap<Integer, Filter> filterMap;
 	private boolean filterFlag;
 	
@@ -106,15 +104,12 @@ public abstract class Probe extends Thread implements IProbe{
 		super(name);
 		this.probeID = UUID.randomUUID().toString().replace("-", "");
 		this.probeName = name;
-		this.collectPeriod = freq;
-		this.collectPeriodMillis = freq * 1000;
+		this.collectPeriod = freq * 1000;
 		this.probeStatus = ProbeStatus.INACTIVE;
-		this.firstFlag = true;
 		this.probeProperties = new HashMap<Integer,ProbeProperty>();
 		this.lastMetric = null;
 		this.loggingFlag = false;
 		this.errorCountFlag=0;
-		this.metricsPullFlag = false;
 		
 		this.filterMap = new HashMap<Integer, Filter>();
 		this.filterFlag = false;
@@ -124,13 +119,13 @@ public abstract class Probe extends Thread implements IProbe{
 	 * MS Agent can attach a logger to the probe in order to log issues concerning this Probe
 	 * @param logger
 	 */
-	public void attachLogger(Logger logger){
+	public void attachLogger(Logger logger) {
 		try{
 			this.myLogger = logger;
 			this.loggingFlag = true;
-			this.writeToProbeLog(Level.INFO, "Logging turned ON");
+			this.writeToProbeLog(Level.INFO, this.probeName + " logging turned ON");
 		}
-		catch(Exception e){
+		catch(Exception e) {
 			this.loggingFlag = false;
 		}
 	}
@@ -138,119 +133,126 @@ public abstract class Probe extends Thread implements IProbe{
 	/**
 	 * method that returns Probe ID
 	 */
-	public String getProbeID(){
+	public String getProbeID() {
 		return this.probeID;
 	}
 	/**
 	 * method that returns Probe Name
 	 */
-	public String getProbeName(){
+	public String getProbeName() {
 		return this.probeName;
 	}
 	/**
 	 * method that sets a new Probe Name
 	 */
-	public void setProbeName(String name){
+	public void setProbeName(String name) {
 		this.probeName = name;
 	}
 	/**
 	 * method that returns current Probe Collection Period (seconds)
 	 */
-	public int getCollectPeriod(){
-		return this.collectPeriod;
+	public int getCollectPeriod() {
+		return this.collectPeriod / 1000;
 	}
 	/**
 	 * method that sets Probe Collection Period (seconds)
 	 */
-	public void setCollectPeriod(int freq){
-		this.collectPeriod = freq;
-		this.collectPeriodMillis = freq * 1000;
+	public void setCollectPeriod(int freq) {
+		this.collectPeriod = freq * 1000;
 	}
+	
 	/**
 	 * method that returns Probe Status - INACTIVE, ACTIVE, DYING
 	 */
-	public ProbeStatus getProbeStatus(){
+	public ProbeStatus getProbeStatus() {
 		return this.probeStatus;
 	}
 	/**
 	 * method that returns the Probes Description provided by the Probe Developer
 	 */
 	public abstract String getDescription();
+	
 	/**
 	 * method that logs messages to this probes log
 	 */
-	public void writeToProbeLog(Level level, Object msg){
+	public void writeToProbeLog(Level level, Object msg) {
 		if(this.loggingFlag)
-			this.myLogger.log(level, this.probeName+": "+msg);
+			this.myLogger.log(Level.INFO, this.probeName + ": " + msg);
 	}
+	
 	/**
 	 * method that adds/updates a property to the Probe Property hashmap
 	 */
-	public void addProbeProperty(int propID,String propName,ProbePropertyType propType,
-			                     String propUnits, String desc){
+	public void addProbeProperty(int propID,String propName,ProbePropertyType propType, String propUnits, String desc) {
 		this.probeProperties.put(propID, new ProbeProperty(propID,propName,propType,propUnits,desc));
 	}
+	
 	/**
 	 * method that returns a hashmap of all Probes Properties
 	 */
-	public HashMap<Integer,ProbeProperty> getProbeProperties(){
+	public HashMap<Integer,ProbeProperty> getProbeProperties() {
 		return this.probeProperties;
 	}
+	
 	/**
 	 * method that returns a list of all Probes Properties
 	 */
-	public ArrayList<ProbeProperty> getProbePropertiesAsList(){
+	public ArrayList<ProbeProperty> getProbePropertiesAsList() {
 		ArrayList<ProbeProperty> list = new ArrayList<ProbeProperty>();
-	    for (Entry<Integer,ProbeProperty> entry : this.probeProperties.entrySet()) {
+	    for (Entry<Integer, ProbeProperty> entry : this.probeProperties.entrySet()) {
 	    	ProbeProperty val = entry.getValue();
 	    	list.add(val);
-		 }
+		}
 	    return list;
 	}
+	
 	/**
 	 * method that returns a Property by ID
 	 */
-	public ProbeProperty getProbePropertyByID(int propID) throws CatascopiaException{
+	public ProbeProperty getProbePropertyByID(int propID) throws CatascopiaException {
 		if (this.probeProperties.containsKey(propID))
 			return this.probeProperties.get(propID);
-		this.writeToProbeLog(Level.WARNING, this.probeName+": Get Probe Property Failed, property ID given does not exist: "+propID);
-		throw new CatascopiaException("Get Probe Property Failed, property ID given does not exist: "+propID, 
-				                       CatascopiaException.ExceptionType.KEY);
+		this.writeToProbeLog(Level.WARNING, this.probeName + ": Get ProbeProperty failed, property ID given does not exist: " + propID);
+		throw new CatascopiaException("Get ProbeProperty failed, property ID given does not exist: " + propID, CatascopiaException.ExceptionType.KEY);
 	}
+	
 	/**
 	 * override Thread class start method to call activate if invoked 
 	 */
 	@Override
-	public void start(){
+	public void start() {
 		this.activate();
 	}
+	
 	/**
 	 * method to activate collecting mechanism of probe
 	 */
-	public synchronized void activate(){
-		if (this.probeStatus == ProbeStatus.INACTIVE){
-			if (firstFlag){
+	public synchronized void activate() {
+		if (this.probeStatus == ProbeStatus.INACTIVE) {
+			if (firstFlag) {
 				super.start();
 				firstFlag = false;
 			}
 			else this.notify();
 			this.probeStatus = ProbeStatus.ACTIVE;	
-			this.writeToProbeLog(Level.INFO, this.probeName+": Probe Activated");
+			this.writeToProbeLog(Level.INFO, this.probeName + " Probe Activated");
 		}	
 	}
+	
 	/**
 	 * method to deactivate collecting mechanism of probe
 	 */
-	public void deactivate(){
+	public void deactivate() {
 		this.probeStatus = ProbeStatus.INACTIVE;
-		this.writeToProbeLog(Level.INFO, this.probeName+": Probe Deactivated");
+		this.writeToProbeLog(Level.INFO, "Probe Deactivated");
 	}
+	
 	/**
 	 * method to terminate-kill probe
 	 */
-	public synchronized void terminate(){
+	public synchronized void terminate() {
 		this.probeStatus = ProbeStatus.DYING;
-		this.writeToProbeLog(Level.INFO, this.probeName+": Probe Terminated");
+		this.writeToProbeLog(Level.INFO, "Probe Terminated");
 		this.notify();
 	}
 	
@@ -258,8 +260,8 @@ public abstract class Probe extends Thread implements IProbe{
 	public void run() {
 		try {
 			ProbeMetric recvMetric;
-			while(this.probeStatus != ProbeStatus.DYING){
-				if(this.probeStatus == ProbeStatus.ACTIVE){
+			while(this.probeStatus != ProbeStatus.DYING) {
+				if(this.probeStatus == ProbeStatus.ACTIVE) {
 					//collecting enabled
 					try {
 						//collect metric
@@ -270,7 +272,7 @@ public abstract class Probe extends Thread implements IProbe{
 						recvMetric.setAssignedProbeID(this.probeID);
 						this.lastMetric = recvMetric;
 						
-						if (this.filterFlag){
+						if (this.filterFlag) {
 							this.lastMetric = new ProbeMetric(recvMetric.getMetricValues(),recvMetric.getMetricTimestamp()); //make a copy
 							this.checkFilters(recvMetric);
 						}	
@@ -286,18 +288,17 @@ public abstract class Probe extends Thread implements IProbe{
 						
 						this.errorCountFlag = 0;
 					}
-					catch(CatascopiaException e){
-						//TODO first error alert
+					catch(CatascopiaException e) {
 						//after a number of errors report termination and terminate
 						if (e.getExceptionType() == CatascopiaException.ExceptionType.QUEUE)
 							this.writeToProbeLog(Level.SEVERE, "Failed to write to Metric Queue: " + e);
 						else this.writeToProbeLog(Level.SEVERE,"Received Metric Failed: " + e);
 						this.errorReport();
 					}
-					catch(Exception e){
+					catch(Exception e) {
 						this.errorReport();
 					}
-					Thread.sleep(this.collectPeriodMillis);
+					Thread.sleep(this.collectPeriod);
 				}
 				else 
 					synchronized(this){
@@ -315,16 +316,18 @@ public abstract class Probe extends Thread implements IProbe{
 			this.errorReport();
 		}
 	}
+	
 	/**
 	 * collect method is provided by Probe Developer
 	 */
 	public abstract ProbeMetric collect();
+	
 	/**
 	 * optional method to clean up loose ends before probe terminates
 	 */
 	public void cleanUp(){}
 	
-	public String metricToJSON(ProbeMetric metric){
+	public String metricToJSON(ProbeMetric metric) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("\"timestamp\":\""+metric.getMetricTimestamp()+"\",");
@@ -346,7 +349,7 @@ public abstract class Probe extends Thread implements IProbe{
 	/**
 	 * method that returns a hashmap containing probe metadata
 	 */
-	public HashMap<String, String> getProbeMetadata(){
+	public HashMap<String, String> getProbeMetadata() {
 		HashMap<String,String> meta = new HashMap<String,String>();
 		meta.put("probeID", this.probeID);
 		meta.put("probeName", this.probeName);
@@ -361,7 +364,7 @@ public abstract class Probe extends Thread implements IProbe{
 	 * @param metric
 	 * @throws CatascopiaException
 	 */
-	public void checkReceivedMetric(ProbeMetric metric) throws CatascopiaException{
+	public void checkReceivedMetric(ProbeMetric metric) throws CatascopiaException {
 		if(!(ProbeMetric.class.isInstance(metric)))
 			throw new CatascopiaException("Received Metric is not valid. All metrics must be of type ProbeMetric.",
 					                       CatascopiaException.ExceptionType.TYPE);
@@ -379,28 +382,28 @@ public abstract class Probe extends Thread implements IProbe{
 		 }
 	}
 	
-	public void turnFilteringOn(int propID, Filter f){
+	public void turnFilteringOn(int propID, Filter f) {
 		this.turnFilteringOn(propID, f, false);
 	}
 	
-	public void turnFilteringOn(int propID, Filter f, boolean globalFilterFlag){
-		if (this.probeProperties.containsKey(propID)){
+	public void turnFilteringOn(int propID, Filter f, boolean globalFilterFlag) {
+		if (this.probeProperties.containsKey(propID)) {
 			this.filterMap.put(propID, f);
 			this.filterFlag = true;
 			f.setGlobalFilterFlag(globalFilterFlag);
 		}
 	}
 	
-	public void turnFilteringOff(){
+	public void turnFilteringOff() {
 		this.filterFlag = false;
 	}
 	
 	
-	private void checkFilters(ProbeMetric metric){
+	private void checkFilters(ProbeMetric metric) {
 		boolean flag = false;
-		for (Entry<Integer,Filter> entry :this.filterMap.entrySet()){
+		for (Entry<Integer,Filter> entry :this.filterMap.entrySet()) {
 			try {
-				if (entry.getValue().check(metric.getMetricValueByID(entry.getKey()))){ //send object and let filter do the casting
+				if (entry.getValue().check(metric.getMetricValueByID(entry.getKey()))) { //send object and let filter do the casting
 					metric.removeMetricValue(entry.getKey());
 					if (entry.getValue().getGlobalFilterFlag())
 						flag = true;
@@ -410,7 +413,7 @@ public abstract class Probe extends Thread implements IProbe{
 				this.writeToProbeLog(Level.SEVERE, e);
 				this.errorReport();
 			}
-			catch (Exception e){
+			catch (Exception e) {
 				this.writeToProbeLog(Level.SEVERE, e);
 				this.errorReport();
 			}
@@ -423,69 +426,54 @@ public abstract class Probe extends Thread implements IProbe{
 	/**
 	 * method that returns last collected metric
 	 */
-	public ProbeMetric getLastMetric(){
+	public ProbeMetric getLastMetric() {
 		return this.lastMetric;
 	}
+	
 	/**
 	 * method that sets last metric
 	 */
-	public void setLastMetric(ProbeMetric metric){
+	public void setLastMetric(ProbeMetric metric) {
 		this.lastMetric = metric;
 	}
+	
 	/**
 	 * method that returns last metric values
 	 */
-	public HashMap<Integer,Object> getLastMetricValues(){
+	public HashMap<Integer,Object> getLastMetricValues() {
 		if(this.lastMetric != null)
 			return this.lastMetric.getMetricValues();
 		return null;
 	}
+	
 	/**
 	 * method that returns last metric timestamp
 	 */
-	public long getLastUpdateTime(){
+	public long getLastUpdateTime() {
 		if(this.lastMetric != null)
 			return this.lastMetric.getMetricTimestamp();
 		return -1;
 	}
+	
 	/**
 	 * method that attaches queue to probe to push metrics to Agent
 	 */
-	public void attachQueue(LinkedBlockingQueue<String> queue){
+	public void attachQueue(LinkedBlockingQueue<String> queue) {
 		this.metricQueue = queue;
 		this.writeToProbeLog(Level.INFO, this.probeName+": Metric Queue attached to Probe");
 	}
 	/**
 	 * method to dettach queue from probe
 	 */
-	public void removeQueue(){
+	public void removeQueue() {
 		this.metricQueue = null;
 		this.writeToProbeLog(Level.INFO, this.probeName+": Metric Queue removed from Probe");
 	}
 	
-	private synchronized void errorReport(){
-		if ((++this.errorCountFlag)>10){
+	private synchronized void errorReport() {
+		if ((++this.errorCountFlag)>Probe.MaxErrorCount) {
 			this.probeStatus=IProbe.ProbeStatus.DYING;
-			this.writeToProbeLog(Level.SEVERE, "Probe:"+this.probeName+" terminating due to many errors");
+			this.writeToProbeLog(Level.SEVERE, "Probe:" + this.probeName + " terminating due to many errors");
 		}
-	}
-	
-	public boolean metricsPullable(){
-		return this.metricsPullFlag;
-	}
-	
-	public void setPullableFlag(boolean flag){
-		this.metricsPullFlag = flag;
-	}
-	
-	public void pull(){
-		if (this.metricQueue != null)
-			try {
-				this.metricQueue.offer(this.metricToJSON(this.collect()), 500, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException e) {
-				this.writeToProbeLog(Level.SEVERE, e);
-			} catch (Exception e) {
-				this.writeToProbeLog(Level.SEVERE, e);
-			}
 	}
 }

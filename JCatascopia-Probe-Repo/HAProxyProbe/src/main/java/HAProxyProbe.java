@@ -10,16 +10,17 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import eu.celarcloud.jcatascopia.probepack.Probe;
-import eu.celarcloud.jcatascopia.probepack.ProbeMetric;
-import eu.celarcloud.jcatascopia.probepack.ProbePropertyType;
+import eu.celarcloud.jcatascopia.probes.Probe;
+import eu.celarcloud.jcatascopia.probes.ProbeMetric;
+import eu.celarcloud.jcatascopia.probes.ProbePropertyType;
+
 
 /**
  * 
  * @author Demetris Trihinas
  *
  */
-public class HAProxyProbe extends Probe{
+public class HAProxyProbe extends Probe {
 	
 	private static final String CONFIG_PATH = "haproxy.properties";
 	private static String auth_header;

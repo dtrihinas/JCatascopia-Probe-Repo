@@ -13,10 +13,9 @@ import java.util.logging.Level;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import eu.celarcloud.jcatascopia.probepack.Probe;
-import eu.celarcloud.jcatascopia.probepack.ProbeMetric;
-import eu.celarcloud.jcatascopia.probepack.ProbePropertyType;
-
+import eu.celarcloud.jcatascopia.probes.Probe;
+import eu.celarcloud.jcatascopia.probes.ProbeMetric;
+import eu.celarcloud.jcatascopia.probes.ProbePropertyType;
 
 public class DataPlayProbe extends Probe{
 	

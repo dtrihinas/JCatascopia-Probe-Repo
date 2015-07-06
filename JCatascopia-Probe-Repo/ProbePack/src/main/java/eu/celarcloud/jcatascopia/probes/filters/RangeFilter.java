@@ -16,41 +16,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package eu.celarcloud.jcatascopia.exceptions;
+package eu.celarcloud.jcatascopia.probes.filters;
 
-public class CatascopiaException extends Exception{
-	private static final long serialVersionUID = 1L;
+/**
+ * The RangeFilter is used to simply filter values in the window [previousValue-Range,previousValue+Range]
+ * The RangeFilteronly requires from users to define upon instantiation, the range of their interest.
+ * 
+ * @author Demetris Trihinas
+ *
+ */
+public class RangeFilter extends Filter{
 	
-	public enum ExceptionType {ARGUMENT,ATTRIBUTE,KEY,TYPE,QUEUE,PROBE_EXISTANCE,NETWORKING,PACKAGING,FILE_ERROR,SUBCRIPTION,CONNECTION,DATABASE,AGGREGATOR}; 
-
-	private String message = null;
-	private ExceptionType extype;
-	 
-	public CatascopiaException() {
-		super();
-	}
-	 
-	public CatascopiaException(String message, ExceptionType type) {
-		super(message);
-	    this.message = type+" Exception: " + message;
-	    this.extype = type;
-	}
-	 
-	public CatascopiaException(Throwable cause) {
-		super(cause);
+	private double range;
+	
+	public RangeFilter(double range){
+		this.range = range;
 	}
 	
-	public ExceptionType getExceptionType(){
-		return this.extype;
+	public void setRange(double r){
+		this.range = r;
 	}
-	 
+	
 	@Override
-	public String toString() {
-		return message;
-	}
-	 
-	@Override
-	public String getMessage() {
-		return message;
+	public void adjustFilter(double curValue) {
+		if (!this.checkFlag){
+			this.window_low = curValue - this.range;
+			this.window_high = curValue + this.range;
+		}
 	}
 }

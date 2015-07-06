@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package eu.celarcloud.jcatascopia.probepack.filters;
+package eu.celarcloud.jcatascopia.probes.filters;
 
 /**
  * Abstract Filter class used to create customized filters that can be attached to ProbeProperties

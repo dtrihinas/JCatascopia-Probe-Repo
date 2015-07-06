@@ -2,12 +2,11 @@
 import java.util.HashMap;
 import java.util.Random;
 
-import eu.celarcloud.jcatascopia.probepack.Probe;
-import eu.celarcloud.jcatascopia.probepack.ProbeMetric;
-import eu.celarcloud.jcatascopia.probepack.ProbePropertyType;
+import eu.celarcloud.jcatascopia.probes.Probe;
+import eu.celarcloud.jcatascopia.probes.ProbeMetric;
+import eu.celarcloud.jcatascopia.probes.ProbePropertyType;
 
-
-public class ExampleProbe extends Probe{
+public class ExampleProbe extends Probe {
 	
 	private static int DEFAULT_SAMPLING_PERIOD = 10;
 	private static String DEFAULT_PROBE_NAME = "ExampleProbe";

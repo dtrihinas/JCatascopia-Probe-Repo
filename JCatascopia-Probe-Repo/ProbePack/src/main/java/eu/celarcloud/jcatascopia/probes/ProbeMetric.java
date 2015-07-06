@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright 2014, Laboratory of Internet Computing (LInC), Department of Computer Science, University of Cyprus
+ * Copyright 2014-2015, 
+ * Laboratory of Internet Computing (LInC), Department of Computer Science, University of Cyprus
  * 
  * For any information relevant to JCatascopia Monitoring System,
  * please contact Demetris Trihinas, trihinas{at}cs.ucy.ac.cy
@@ -16,12 +17,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package eu.celarcloud.jcatascopia.probepack;
+package eu.celarcloud.jcatascopia.probes;
 
 import java.util.Date;
 import java.util.HashMap;
 
-import eu.celarcloud.jcatascopia.exceptions.CatascopiaException;
+import eu.celarcloud.jcatascopia.agent.exceptions.CatascopiaException;
 
 /**
  * 
@@ -30,34 +31,39 @@ import eu.celarcloud.jcatascopia.exceptions.CatascopiaException;
  * An object of the ProbeMetric class represents a collected monitoring metric group of properties
  *
  */
-public class ProbeMetric{
+public class ProbeMetric {
 	/**
-	 * timestamp of collected metric in ms.  
-	 * Time is expressed as UNIX time. ms from UNIX epoch
+	 * 
+	 * timestamp of collected metric in ms expressed as UNIX time
+	 * 
 	 */
 	private long timestamp;
 	/**
+	 * 
 	 * hashmap to store collected values
+	 * 
 	 */
 	private HashMap<Integer,Object> values;
 	/**
+	 * 
 	 * probe ID that collected this metric
+	 * 
 	 */
 	private String probeID;
 	
-	public ProbeMetric(){
+	public ProbeMetric() {
 		this(new HashMap<Integer,Object>(), System.currentTimeMillis());
 	}
 	
-	public ProbeMetric(HashMap<Integer,Object> values){
-		this(values,System.currentTimeMillis());
+	public ProbeMetric(HashMap<Integer,Object> values) {
+		this(values, System.currentTimeMillis());
 	}
 	/**
 	 * 
 	 * @param values - hashmap with key the propertyID of the metric
 	 * @param timestamp - time values where collected in ms
 	 */
-	public ProbeMetric(HashMap<Integer,Object> values, long timestamp){
+	public ProbeMetric(HashMap<Integer,Object> values, long timestamp) {
 		this.timestamp = timestamp;
 		this.values = values;
 	}
@@ -66,11 +72,11 @@ public class ProbeMetric{
 	 * @param propID - propertyID
 	 * @param value - value to be added
 	 */
-	public void addMetricValue(int propID, Object value){
+	public void addMetricValue(int propID, Object value) {
 		this.values.put(propID, value);
 	}
 	
-	public void removeMetricValue(int propID){
+	public void removeMetricValue(int propID) {
 		this.values.remove(propID);
 	}
 	/**
@@ -79,7 +85,7 @@ public class ProbeMetric{
 	 * @return
 	 * @throws CatascopiaException
 	 */
-	public Object getMetricValueByID(int propID) throws CatascopiaException{
+	public Object getMetricValueByID(int propID) throws CatascopiaException {
 		if (this.values.containsKey(propID))
 			return this.values.get(propID);
 		throw new CatascopiaException("Get Metric Value Failed, property ID given does not exist: "+propID, 
@@ -89,25 +95,25 @@ public class ProbeMetric{
 	 * method that returns the hashmap with all the values
 	 * @return
 	 */
-	public HashMap<Integer,Object> getMetricValues(){
+	public HashMap<Integer,Object> getMetricValues() {
 		return this.values;
 	}
 	/**
 	 * method that returns the timestamp of the collected metric
 	 * @return
 	 */
-	public long getMetricTimestamp(){
+	public long getMetricTimestamp() {
 		return this.timestamp;
 	}
 	/**
 	 * method that sets the timestamp of the collected metric
 	 * @return
 	 */
-	public void setMetricTimestamp(long t){
+	public void setMetricTimestamp(long t) {
 		this.timestamp = t;
 	}
 	
-	public String getReadableTimestamp(){
+	public String getReadableTimestamp() {
 		return new Date(this.timestamp).toString();
 	}
 	
@@ -115,22 +121,22 @@ public class ProbeMetric{
 	 * method that returns the probeID of the metric
 	 * @return
 	 */
-	public String getAssignedProbeID(){
+	public String getAssignedProbeID() {
 		return this.probeID;
 	}
 	/**
 	 * method that assigns a probeID to the metric
 	 * @return
 	 */
-	public void setAssignedProbeID(String probeid){
+	public void setAssignedProbeID(String probeid) {
 		this.probeID = probeid;
 	}
 	
-	public void removeAll(){
+	public void removeAll() {
 		this.values.clear();
 	}
 	
-	public boolean isEmpty(){
+	public boolean isEmpty() {
 		return this.values.isEmpty();
 	}
 }
